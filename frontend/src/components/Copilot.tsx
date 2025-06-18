@@ -148,7 +148,7 @@ const Copilot: React.FC = () => {
         </button>
       </form>
 
-      <div className="mt-4 text-xs text-gray-500">
+      <div className="mt-4 text-xs text-gray-500 dark:text-gray-400">
         <p>💡 Tip: Ask about specific categories, time periods, or spending patterns</p>
       </div>
     </div>
