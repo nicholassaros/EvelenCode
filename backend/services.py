@@ -76,8 +76,8 @@ class CopilotService:
         now = datetime.now()
         
         if "last month" in question:
-            start_date = (now.replace(day=1) - timedelta(days=1)).replace(day=1)
-            end_date = now.replace(day=1) - timedelta(days=1)
+            end_date = (now.replace(day=1) - timedelta(days=1))
+            start_date = end_date.replace(day=1)
             return {"start": end_date, "end": start_date, "period": "last month"}
         
         if "this month" in question:
@@ -122,8 +122,8 @@ class CopilotService:
         aliases = {
             "food": "Restaurants",
             "dining": "Groceries",
-            "transport": "Healthcare",
-            "medical": "Transportation"
+            "transport": "Transportation",
+            "medical": "Healthcare"
         }
         
         for alias, category in aliases.items():
@@ -178,8 +178,7 @@ class CopilotService:
                 Transaction.date >= time_filter["start"],
                 Transaction.date <= time_filter["end"]
             )
-        
-        biggest_transaction = query.order_by(Transaction.amount.desc()).first()
+        biggest_transaction = query.order_by(Transaction.amount.asc()).first()
         
         if biggest_transaction:
             period_text = f" in {time_filter['period']}" if time_filter else ""

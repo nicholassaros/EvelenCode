@@ -69,19 +69,19 @@ const Copilot: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-4">💬 Financial Copilot</h2>
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+      <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">💬 Financial Copilot</h2>
       
       {/* Sample Questions */}
       {messages.length === 0 && (
         <div className="mb-6">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Try asking questions like:</h3>
+          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Try asking questions like:</h3>
           <div className="grid grid-cols-1 gap-2">
             {sampleQuestions.map((question, index) => (
               <button
                 key={index}
                 onClick={() => handleSampleQuestion(question)}
-                className="text-left text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 p-2 rounded transition-colors"
+                className="text-left text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-100 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900 p-2 rounded transition-colors"
               >
                 "{question}"
               </button>
@@ -104,12 +104,12 @@ const Copilot: React.FC = () => {
             
             {/* Copilot Response */}
             <div className="flex justify-start">
-              <div className="bg-gray-100 px-4 py-2 rounded-lg max-w-xs lg:max-w-md">
-                <p className="text-sm text-gray-800">{message.response.answer}</p>
+              <div className="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg max-w-xs lg:max-w-md">
+                <p className="text-sm text-gray-800 dark:text-gray-100">{message.response.answer}</p>
                 
                 {/* Additional Data Display */}
                 {message.response.data && (
-                  <div className="mt-2 text-xs text-gray-600 bg-gray-50 p-2 rounded">
+                  <div className="mt-2 text-xs text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-600 p-2 rounded">
                     {message.response.data.category && (
                       <p>Category: {message.response.data.category}</p>
                     )}
@@ -136,7 +136,7 @@ const Copilot: React.FC = () => {
           value={currentQuestion}
           onChange={(e) => setCurrentQuestion(e.target.value)}
           placeholder="Ask about your expenses..."
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           disabled={loading}
         />
         <button

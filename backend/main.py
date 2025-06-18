@@ -6,6 +6,7 @@ from typing import List, Dict, Any
 import pandas as pd
 import io
 from datetime import datetime, timedelta
+import logging
 
 from models import get_db, create_tables, Transaction, Category
 from schemas import (
@@ -37,10 +38,13 @@ async def startup_event():
     create_tables()
     
     # Create default categories if they don't exist
-    db = next(get_db())
-    categorization_service = CategorizationService(db)
-    categorization_service.create_default_categories()
-    db.close()
+    db_gen = get_db()
+    db = next(db_gen)
+    try:
+        categorization_service = CategorizationService(db)
+        categorization_service.create_default_categories()
+    finally:
+        db_gen.close()
 
 @app.get("/")
 async def root():
@@ -87,8 +91,11 @@ async def upload_csv(file: UploadFile = File(...), db: Session = Depends(get_db)
             db.add(transaction)
             transactions_created.append(transaction)
             
+        # except Exception as e:
+        #     continue  # Skip invalid rows
         except Exception as e:
-            continue  # Skip invalid rows
+            logging.warning(f"Skipping row due to error: {e}")
+            continue
     
     db.commit()
     
@@ -107,7 +114,7 @@ async def get_transactions(
     """Get all transactions with optional filtering."""
     query = db.query(Transaction)
     
-    if category_id:
+    if category_id is not None:
         query = query.filter(Transaction.category_id == category_id)
     
     transactions = query.offset(skip).limit(limit).all()
@@ -174,7 +181,7 @@ async def get_dashboard_summary(db: Session = Depends(get_db)):
     ]
     
     # Monthly expenses (last 12 months)
-    twelve_months_ago = datetime.now() - timedelta(days=1000)
+    twelve_months_ago = datetime.now() - timedelta(days=365)
     monthly_expenses = db.query(
         extract('year', Transaction.date).label('year'),
         extract('month', Transaction.date).label('month'),

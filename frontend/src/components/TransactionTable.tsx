@@ -43,34 +43,39 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions, onTra
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-4">Recent Transactions</h2>
-      
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+      <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+        Recent Transactions
+      </h2>
+
       {transactions.length === 0 ? (
-        <p className="text-gray-500">No transactions found. Upload a CSV file to get started.</p>
+        <p className="text-gray-500 dark:text-gray-400">
+          No transactions found. Upload a CSV file to get started.
+        </p>
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full table-auto">
-            <thead className="bg-gray-50">
+            <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Date</th>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Description</th>
-                <th className="px-4 py-2 text-right text-sm font-medium text-gray-700">Amount</th>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Category</th>
+                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-200">Date</th>
+                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-200">Description</th>
+                <th className="px-4 py-2 text-right text-sm font-medium text-gray-700 dark:text-gray-200">Amount</th>
+                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700 dark:text-gray-200">Category</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
               {transactions.slice(0, 50).map((transaction) => (
-                <tr key={transaction.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-2 text-sm text-gray-900">
+                <tr key={transaction.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <td className="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">
                     {formatDate(transaction.date)}
                   </td>
-                  <td className="px-4 py-2 text-sm text-gray-900">
+                  <td className="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">
                     {transaction.description}
                   </td>
                   <td className="px-4 py-2 text-sm text-right font-medium">
                     <span className={transaction.amount < 0 ? 'text-red-600' : 'text-green-600'}>
-                      {transaction.amount < 0 ? '-' : '+'}{formatAmount(transaction.amount)}
+                      {transaction.amount < 0 ? '-' : '+'}
+                      {formatAmount(transaction.amount)}
                     </span>
                   </td>
                   <td className="px-4 py-2 text-sm">
@@ -79,7 +84,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions, onTra
                         value={transaction.category_id || ''}
                         onChange={(e) => handleCategoryChange(transaction.id, parseInt(e.target.value))}
                         onBlur={() => setEditingTransaction(null)}
-                        className="text-sm border border-gray-300 rounded px-2 py-1"
+                        className="text-sm border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200"
                         autoFocus
                       >
                         <option value="">Uncategorized</option>
@@ -92,7 +97,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions, onTra
                     ) : (
                       <button
                         onClick={() => setEditingTransaction(transaction.id)}
-                        className="text-sm px-2 py-1 rounded hover:bg-gray-100 border"
+                        className="text-sm px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600 border dark:border-gray-500 text-gray-700 dark:text-gray-200"
                       >
                         {transaction.category_obj?.name || 'Uncategorized'}
                       </button>
@@ -108,4 +113,4 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ transactions, onTra
   );
 };
 
-export default TransactionTable; 
+export default TransactionTable;

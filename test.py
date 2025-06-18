@@ -141,20 +141,38 @@ def store_payments(amount_iterator):
     for i in amount_iterator:
         print(i)
 
-
 def callback_example(amount):
     print(amount)
     return True
 
 
-class MyPaymentProcessor:
-    def __init__(self)
-
+import queue
+import threading
 
 def process_payments_2():
-    """
-    Read streamed payments and store them
-    """
+    q = queue.Queue()
+    sentinel = object()
+
+    def callback_fn(amount):
+        q.put(amount)
+
+    def producer():
+        stream_payments(callback_fn)
+        q.put(sentinel) 
+
+    def amount_iterator():
+        while True:
+            item = q.get()
+            if item is sentinel:
+                break
+            yield item
+
+    t = threading.Thread(target=producer)
+    t.start()
+
+    store_payments(amount_iterator())
+
+    t.join()
 
 
 process_payments_2()
